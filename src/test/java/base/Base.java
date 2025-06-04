@@ -7,8 +7,6 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
-import javax.swing.*;
 import java.time.Duration;
 
 public abstract class Base {
@@ -37,10 +35,6 @@ public abstract class Base {
 
     public void type(WebElement element, String textInput) {
         element.sendKeys(textInput);
-    }
-
-    public String getText(WebElement element) {
-        return element.getText();
     }
 
     public void waitToBeDisplayed(WebElement element) {

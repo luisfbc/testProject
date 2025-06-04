@@ -4,12 +4,17 @@ import base.WebDriverFactory;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
-import pages.BasePage;
 import pages.SearchPage;
+import utils.Item;
+import utils.TestContext;
 
 public class CommonSteps {
 
-    private SearchPage searchPage;
+    private final TestContext testContext;
+
+    public CommonSteps(TestContext context) {
+        this.testContext = context;
+    }
 
     @Given("I go to Amazon web page")
     public void iGoToAmazonWebPage() {
@@ -20,20 +25,22 @@ public class CommonSteps {
 
     @When("I search for {string} in the search bar")
     public void iSearchForInTheSearchBar(String product) {
-        BasePage basePage = new BasePage(WebDriverFactory.getDriver());
-        basePage.waitForMenu();
-        basePage.searchProduct(product);
+        SearchPage searchPage = testContext.getPageObjectManager().getSearchPage(WebDriverFactory.getDriver());
+        searchPage.waitForMenu();
+        searchPage.searchProduct(product);
     }
 
     @And("I validate the option {string} from the list")
     public void iSelectTheOption(String optionNumber) {
-        searchPage = new SearchPage(WebDriverFactory.getDriver());
+        SearchPage searchPage = testContext.getPageObjectManager().getSearchPage(WebDriverFactory.getDriver());
         searchPage.waitForResultsDisplayed();
-        searchPage.getDataFromItem(optionNumber);
+        Item item = searchPage.getDataFromItem(optionNumber);
+        testContext.getScenarioContext().setContext("price", item.getPrice());
     }
 
     @And("I add the product {string} to my cart")
     public void iAddTheResultToMyCart(String optionNumber) {
+        SearchPage searchPage = testContext.getPageObjectManager().getSearchPage(WebDriverFactory.getDriver());
         searchPage.addToCart(optionNumber);
         searchPage.scrollTo("top");
     }
