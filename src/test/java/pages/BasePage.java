@@ -1,6 +1,7 @@
 package pages;
 
 import base.Base;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -35,6 +36,9 @@ public class BasePage extends Base {
     @FindBy(id = "nav-cart")
     private WebElement cartButton;
 
+    @FindBy(xpath = "//div[@class ='a-changeover-inner']")
+    private WebElement itemAddedBanner;
+
     /* CONSTRUCTOR */
     public BasePage (WebDriver webDriver) {
         super(webDriver);
@@ -53,7 +57,8 @@ public class BasePage extends Base {
     public void goToMyCart() {
         scrollTo("top");
         waitToBeClickable(cartButton);
-        click(cartButton);
+        waitToInvisible(itemAddedBanner);
+        ((JavascriptExecutor) webDriver).executeScript("arguments[0].click();", cartButton);
     }
 
     public void search(String productName) {

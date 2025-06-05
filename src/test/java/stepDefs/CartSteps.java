@@ -4,6 +4,7 @@ import base.WebDriverFactory;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import pages.CartPage;
+import utils.Item;
 import utils.TestContext;
 
 public class CartSteps {
@@ -20,13 +21,13 @@ public class CartSteps {
         cartPage.waitForMenu();
         cartPage.goToMyCart();
         cartPage.waitForCart();
-        Integer expectedPrice = (Integer) testContext.getScenarioContext().getContext("price");
-        System.out.println("PRECIO GUARDADOOOOOO:         "+expectedPrice);
     }
 
     @And("I validate the displayed {string} in the cart")
-    public void iValidateTheDisplayedPriceInTheCart() {
-
+    public void iValidateTheDisplayedPriceInTheCart(String option) {
+        CartPage cartPage = testContext.getPageObjectManager().getCartPage(WebDriverFactory.getDriver());
+        Item item = (Item) testContext.getScenarioContext().getContext("item");
+        cartPage.getSpecificItemPrice(item);
     }
 
     @And("I expect the search price is the same as the cart price")

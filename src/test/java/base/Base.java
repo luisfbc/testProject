@@ -3,7 +3,6 @@ package base;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -18,8 +17,8 @@ public abstract class Base {
     /* CONSTRUCTOR */
 
     public Base (WebDriver webDriver) {
-        this.webDriver = WebDriverFactory.getDriver();
-        this.webDriverWait = new WebDriverWait(webDriver, Duration.ofSeconds(10));
+        this.webDriver = webDriver;
+        this.webDriverWait = new WebDriverWait(webDriver, Duration.ofSeconds(50));
         PageFactory.initElements(webDriver, this);
     }
 
@@ -49,10 +48,14 @@ public abstract class Base {
         webDriverWait.until(ExpectedConditions.invisibilityOf(element));
     }
 
-    public void scrollToElement(WebElement element) {
+    /*public void scrollToElement(WebElement element) {
         new Actions(webDriver)
                 .scrollToElement(element)
                 .perform();
+    }*/
+
+    public void scrollToElement(WebElement element) {
+        ((JavascriptExecutor) webDriver).executeScript("arguments[0].scrollIntoView();", element);
     }
 
     public void scrollTo(String side) {
@@ -63,7 +66,6 @@ public abstract class Base {
             case "bottom":
                 ((JavascriptExecutor) webDriver).executeScript("window.scrollTo(0,document.body.scrollHeight)");
         }
-
     }
 
 }

@@ -16,10 +16,10 @@ public class CommonSteps {
         this.testContext = context;
     }
 
-    @Given("I go to Amazon web page")
-    public void iGoToAmazonWebPage() {
-        WebDriverFactory.initDriver().get("https://www.amazon.com");
-        WebDriverFactory.getDriver().get("https://www.amazon.com ");
+    @Given("I go to Amazon web page in {string} browser")
+    public void iGoToAmazonWebPage(String browser) {
+        WebDriverFactory.initDriver(browser);
+        WebDriverFactory.getDriver().get("https://www.amazon.com");
     }
 
 
@@ -35,11 +35,11 @@ public class CommonSteps {
         SearchPage searchPage = testContext.getPageObjectManager().getSearchPage(WebDriverFactory.getDriver());
         searchPage.waitForResultsDisplayed();
         Item item = searchPage.getDataFromItem(optionNumber);
-        testContext.getScenarioContext().setContext("price", item.getPrice());
+        testContext.getScenarioContext().setContext("item", item);
     }
 
     @And("I add the product {string} to my cart")
-    public void iAddTheResultToMyCart(String optionNumber) {
+    public void iAddTheProduct(String optionNumber) {
         SearchPage searchPage = testContext.getPageObjectManager().getSearchPage(WebDriverFactory.getDriver());
         searchPage.addToCart(optionNumber);
         searchPage.scrollTo("top");

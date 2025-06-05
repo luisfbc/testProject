@@ -1,24 +1,16 @@
 package pages;
 
-import io.cucumber.java.be.I;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.FindBys;
 import utils.Item;
-
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.List;
 
 public class SearchPage extends BasePage {
     /* ELEMENTS */
 
     @FindBy(xpath = "//h2[contains(text(),'Results')]")
     private WebElement resultLabelText;
-    @FindBy(xpath = "//div[@class ='a-changeover-inner']")
-    private WebElement itemAddedBanner;
 
     //WebElement itemFromList;
 
@@ -46,14 +38,17 @@ public class SearchPage extends BasePage {
         waitToBeDisplayed(itemToBeAdded);
         WebElement addToCartButton = itemToBeAdded.findElement(By.xpath(".//button[@name='submit.addToCart']"));
         addToCartButton.click();
-        waitToInvisible(itemAddedBanner);
     }
 
     public Item getDataFromItem(String numberOnList) {
         WebElement itemToExtract = getSpecificItemFromList(numberOnList);
+        WebElement priceTag =  itemToExtract.findElement(By.xpath(".//span[@class = 'a-price-whole']"));
+        WebElement nameTag =  itemToExtract.findElement(By.xpath(".//div[(@data-cy = 'title-recipe')]"));
+        waitToBeDisplayed(priceTag);
+        waitToBeDisplayed(nameTag);
         Item item = new Item();
-        item.setName(itemToExtract.findElement(By.xpath(".//div[(@data-cy = 'title-recipe')]")).getText());
-        item.setPrice(Integer.parseInt(itemToExtract.findElement(By.xpath(".//span[@class = 'a-price-whole']")).getText()));
+        item.setName(nameTag.getText());
+        item.setPrice(Integer.parseInt(priceTag.getText()));
         return item;
     }
 }
